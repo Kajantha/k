@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kavin's Learning Adventure</title>
+    <style>
+        /* CSS for styling the webpage */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 36px;
+            color: #2e3d49;
+        }
+
+        header p {
+            font-size: 18px;
+            color: #607d8b;
+        }
+
+        .timer {
+            text-align: right;
+            font-size: 20px;
+            color: #d32f2f;
+            margin-bottom: 30px;
+        }
+
+        .question-container {
+            margin-bottom: 20px;
+        }
+
+        .question-container div {
+            margin-bottom: 15px;
+        }
+
+        .question-container label {
+            font-size: 18px;
+            display: block;
+        }
+
+        .question-container input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .score-container {
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+
+        #submit-btn {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Kavin's Learning Adventure</h1>
+            <p>Year 2 SATs Practice Questions</p>
+        </header>
+
+        <div class="timer">
+            <p>Time Remaining: <span id="timer">20:00</span></p>
+        </div>
+
+        <form id="quiz-form">
+            <div class="question-container" id="question-container">
+                <!-- Questions will be inserted here dynamically -->
+            </div>
+
+            <button type="submit" id="submit-btn">Submit</button>
+        </form>
+
+        <div id="score" class="score-container">
+            <!-- Score will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for timer, questions, and scoring
+        const questions = [
+            { question: "What is 7 + 3?", answer: "10" },
+            { question: "What is 9 - 4?", answer: "5" },
+            { question: "What is 6 x 2?", answer: "12" },
+            { question: "What is 12 ÷ 4?", answer: "3" },
+            { question: "What is 15 + 5?", answer: "20" },
+            { question: "What is 18 - 9?", answer: "9" },
+            { question: "What is 8 x 3?", answer: "24" },
+            { question: "What is 20 ÷ 5?", answer: "4" },
+            { question: "What is 13 + 7?", answer: "20" },
+            { question: "What is 16 - 8?", answer: "8" },
+            { question: "What is 10 x 3?", answer: "30" },
+            { question: "What is 25 ÷ 5?", answer: "5" },
+            { question: "What is 11 + 4?", answer: "15" },
+            { question: "What is 14 - 6?", answer: "8" },
+            { question: "What is 6 x 4?", answer: "24" },
+            { question: "What is 28 ÷ 7?", answer: "4" },
+            { question: "What is 17 + 3?", answer: "20" },
+            { question: "What is 12 - 5?", answer: "7" },
+            { question: "What is 9 x 2?", answer: "18" },
+            { question: "What is 24 ÷ 8?", answer: "3" }
+        ];
+
+        let timer;
+        let timeLeft = 20 * 60; // 20 minutes
+        let score = 0;
+
+        function startTimer() {
+            timer = setInterval(function () {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                document.getElementById("timer").textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(timer);
+                    alert("Time's up!");
+                    calculateScore();
+                }
+            }, 1000);
+        }
+
+        function displayQuestions() {
+            const questionContainer = document.getElementById("question-container");
+            questions.forEach((q, index) => {
+                const div = document.createElement("div");
+                div.innerHTML = `
+                    <label for="q${index}">${q.question}</label>
+                    <input type="text" id="q${index}" name="q${index}" />
+                `;
+                questionContainer.appendChild(div);
+            });
+        }
+
+        function calculateScore() {
+            score = 0;
+            questions.forEach((q, index) => {
+                const answer = document.getElementById(`q${index}`).value;
+                if (answer === q.answer) {
+                    score++;
+                }
+            });
+
+            document.getElementById("quiz-form").style.display = "none";
+            const scoreContainer = document.getElementById("score");
+            scoreContainer.style.display = "block";
+            scoreContainer.innerHTML = `<h2>Your Score: ${score} / 20</h2>`;
+        }
+
+        document.getElementById("quiz-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            calculateScore();
+        });
+
+        startTimer();
+        displayQuestions();
+    </script>
+</body>
+</html>
